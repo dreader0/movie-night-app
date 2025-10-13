@@ -36,7 +36,10 @@ function MovieInput({ onSubmit }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <button
-            onClick={() => onSubmit(title)}
+            onClick={() => {
+              onSubmit(title);
+              setTitle("");
+            }}
             className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             <span>Submit</span>
@@ -107,22 +110,25 @@ function MovieList({ movies, handleDragEnd, round, handleVeto }) {
 }
 
 export default function App() {
-  const players = ["Dan", "Julia", "Jaime"];
+  const players = ["Player 1", "Player 2", "Player"];
   const [turn, setTurn] = useState(0);
   const [round, setRound] = useState("nominate");
-  const [movies, setMovies] = useState([
-    "Parasite",
-    "Anora",
-    "Challengers",
-    "Trainspotting",
-    "It Follows",
-  ]); //'Parasite','Anora','Challengers', 'Trainspotting', 'It Follows'
+  const [movies, setMovies] = useState([]); //'Parasite','Anora','Challengers', 'Trainspotting', 'It Follows'
   const [rankings, setRankings] = useState([]);
   const [finalScores, setFinalScores] = useState([]);
   const [winner, setWinner] = useState(null);
 
   const playerCount = players.length;
   const maxMovies = 2 * playerCount;
+
+  function resetApp() {
+    setTurn(0);
+    setRound("nominate");
+    setMovies([]);
+    setRankings([]);
+    setFinalScores([]);
+    setWinner(null);
+  }
 
   function nextRound() {
     const currentRoundIndex = rounds.indexOf(round);
@@ -132,8 +138,10 @@ export default function App() {
 
     if (["rank"].includes(currentRound)) {
       let nextTurn = turn + 1;
-      if (nextTurn <= players.length) {
-        nextRoundIndex = currentRoundIndex;
+      if (nextTurn <= playerCount) {
+        if (nextTurn != playerCount) {
+          nextRoundIndex = currentRoundIndex;
+        }
         const nextRankings = rankings.slice();
         nextRankings.push({ player: players[turn], ranking: movies });
         setRankings(nextRankings);
@@ -144,6 +152,7 @@ export default function App() {
     const nextRound = rounds[nextRoundIndex];
     if (nextRoundIndex >= rounds.length) {
       nextRoundIndex = 0;
+      resetApp();
     }
 
     console.log(nextRound);
@@ -253,7 +262,9 @@ export default function App() {
         />
       )}
 
-      <button onClick={nextRound}>next round</button>
+      <button className="mt-4" onClick={nextRound}>
+        next round
+      </button>
     </div>
   );
 }
