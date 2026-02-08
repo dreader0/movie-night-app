@@ -39,6 +39,7 @@ function MovieInput({ onSubmit }) {
             onClick={() => {
               onSubmit(title);
               setTitle("");
+              document.getElementById("search-dropdown").focus();
             }}
             className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
@@ -110,7 +111,7 @@ function MovieList({ movies, handleDragEnd, round, handleVeto }) {
 }
 
 export default function App() {
-  const players = ["Player 1", "Player 2", "Player"];
+  const players = ["Player 1", "Player 2", "Player 3"];
   const [turn, setTurn] = useState(0);
   const [round, setRound] = useState("nominate");
   const [movies, setMovies] = useState([]); //'Parasite','Anora','Challengers', 'Trainspotting', 'It Follows'
